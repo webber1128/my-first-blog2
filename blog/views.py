@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Post
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
+from django.http import HttpResponseRedirect
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -11,7 +12,7 @@ def post_new(request):
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return HttpResponseRedirect(reverse('post_detail', kwargs={'pk':pk}))
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
